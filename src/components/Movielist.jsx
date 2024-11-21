@@ -1,56 +1,68 @@
-import { useState,  } from "react"
+import { useState, useEffect  } from "react"
 import MovieCard from "./MovieCard"
+import { Container } from "react-bootstrap";
 
 const Movielist = () => {
-    const [query, setQuery] = useState('');
-    const [movies, setMovies] = useState([]);
+  const [movies, setMovie] = useState([]);
 
-
-    const handleSearch = async () => {
-    
-      const url = 
-    `https://streaming-availability.p.rapidapi.com/shows/search/title?series_granularity=show&show_type=movie&output_language=en&title=${query}`;
+  const handleMovie = async () => {
+    const url = 'https://imdb-top-100-movies.p.rapidapi.com/';
 const options = {
 	method: 'GET',
 	headers: {
-		'x-rapidapi-key': '1f820aeddbmshc0d8ad3855a8160p1123b2jsnf0ca1f3abf0a',
-		'x-rapidapi-host': 'streaming-availability.p.rapidapi.com'
+		'x-rapidapi-key': '9555a2c2f7msh1a8c31e9c469eb7p17c803jsn5618b8aa499f',
+		'x-rapidapi-host': 'imdb-top-100-movies.p.rapidapi.com'
 	}
 };
 
 try {
 	const response = await fetch(url, options);
-	const result = await response.json();
-    setMovies(result.result || []); //adjust this based on API response structure
+	const data = await response.json();
+	console.log(data);
+  setMovie(data)
 } catch (error) {
 	console.error(error);
 }
+  }
+  useEffect(() => {
+    handleMovie();
+  }, [])
 
-    }
-    
-  return (
-    <div>
-      <input type="text"
-      placeholder="search for a movie"
-      value={query}
-      onChange={(e) => setQuery(e.target.value)}
-       />
-       <button onClick={handleSearch}>Search</button>
+  const style = {
+    cont: {
+      display: 'flex',
+      flexWrap: 'wrap',
+      // justifyContent: 'center',
+      margin: '30px 30px',
+      padding: '20px',
+      maxWidth: '1000px'
+    },
 
-    <div>
-      {movies.map((movie, index) => (
-        <MovieCard key={index}
-        title={movie.title}
-        overview={movie.overview}
-        releaseYear={movie.releaseYear}
-        showType={movie.genres}
-        imageSet={movie.poster_path} //adjust this based on API response structure
-       />
-        
-      ))}
-    </div>
+  }
 
-    </div>
+  return(
+    <>
+     <div>
+        <h1>Top IMDb 100 Movies</h1>
+
+        <div style={style.cont}>
+          {movies && movies.length > 0 ? (
+            movies.map((movie, index) => (
+              <MovieCard
+                key={index}
+                title={movie.title}
+                description={movie.description}
+                year={movie.year}
+                rating={movie.rating}
+                image={movie.image}
+              />
+            ))
+          ) : (
+            <p>Loading movies...</p>
+          )}
+        </div>
+      </div>
+    </>
   )
 }
 

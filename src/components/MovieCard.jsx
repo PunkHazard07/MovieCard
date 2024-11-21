@@ -2,20 +2,34 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 
 
-const MovieCard = ({title, overview, releaseYear, showType, imageSet}) => {
+const MovieCard = ({title, description, year, rating, image}) => {
+
+  const style = {
+    img: {
+      width: '100%',
+      height: 'auto',
+      objectFit: 'cover'
+    },
+    body: {
+      padding: '1rem',
+      margin: '0',
+      gap: "10px",
+      height: '100%',
+    }
+  }
   return (
-    <Card style={{ width: '18rem' }}>
-      <Card.Img variant="top" src={ imageSet ||"holder.js/100px180" } />
-      <Card.Body>
+    <Card style={{ width: '15rem'}}>
+      <Card.Img variant="top" src={ image ||"holder.js/100px180" } style={style.img}/>
+      <Card.Body style={style.body}>
         <Card.Title>{title || "title"}</Card.Title>
         <Card.Text>
-         {overview || "About"}
+         {description || "About"}
         </Card.Text>
         <Card.Text>
-         {releaseYear || "Release Year"}
+        Year:  {year || "Release Year"}
         </Card.Text>
         <Card.Text>
-         {showType || "Genre"}
+        Ratings: {rating || "Genre"}
         </Card.Text>
         <Button variant="primary">Watch Now</Button>
       </Card.Body>
